@@ -1,7 +1,10 @@
 import React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { IoEye } from "react-icons/io5";
+import { IoMdEyeOff } from "react-icons/io";
 
 const addSchema = yup
   .object({
@@ -14,6 +17,7 @@ const addSchema = yup
   .required();
 
 const AddPassword = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -45,13 +49,21 @@ const AddPassword = () => {
           {...register("name")}
         />
         <p className="text-sm text-red-600">{errors.name?.message}</p>
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 mb-3 border rounded"
-          {...register("password")}
-        />
-        <p className="text-sm text-red-600">{errors.password?.message}</p>
+        <div className="relative w-full mb-3">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className="w-full p-2 mb-3 border rounded"
+            {...register("password")}
+          />
+          <span
+            className="absolute right-3 top-2 cursor-pointer text-gray-600"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <IoMdEyeOff size={20} /> : <IoEye size={20} />}
+          </span>
+          <p className="text-sm text-red-600">{errors.password?.message}</p>
+        </div>
         <button
           type="submit"
           className="w-full p-2 bg-blue-500 text-white rounded "

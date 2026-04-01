@@ -1,7 +1,13 @@
 import React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { loginUser } from "../services/authService";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { IoEye } from "react-icons/io5";
+import { IoMdEyeOff } from "react-icons/io";
 
 const loginSchema = yup
   .object({
@@ -16,15 +22,33 @@ const loginSchema = yup
   .required();
 
 const Login = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const redirect = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(loginSchema),
   });
 
-  const handleLogin = () => {};
+  const handleLogin = async (form) => {
+    setIsSubmitting(true);
+    try {
+      const { data } = await loginUser(form);
+      localStorage.setItem("token", data.token);
+      toast.success("Login successful!");
+      redirect("/passwords");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Invalid login");
+    } finally {
+      reset();
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -40,18 +64,27 @@ const Login = () => {
           {...register("email")}
         />
         <p className="text-sm text-red-600">{errors.email?.message}</p>
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 mb-3 border rounded"
-          {...register("password")}
-        />
-        <p className="text-sm text-red-600">{errors.password?.message}</p>
+        <div className="relative w-full mb-3">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className="w-full p-2 mb-3 border rounded"
+            {...register("password")}
+          />
+          <span
+            className="absolute right-3 top-2 cursor-pointer text-gray-600"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <IoMdEyeOff size={20} /> : <IoEye size={20} />}
+          </span>
+          <p className="text-sm text-red-600">{errors.password?.message}</p>
+        </div>
+
         <button
           type="submit"
           className="w-full p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
-          Login
+          {isSubmitting ? "signing in" : "Login"}
         </button>
 
         <p className="mt-3 text-blue-700">

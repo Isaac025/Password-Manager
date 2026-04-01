@@ -74,7 +74,13 @@ const editPassword = async (req, res) => {
 
     // Decrypt before sending back
     const decrypted = decrypt(JSON.parse(updatedPassword.password));
-    res.json({ ...updatedPassword._doc, password: decrypted });
+    res
+      .status(200)
+      .json({
+        message: "password updated successfully",
+        ...updatedPassword._doc,
+        password: decrypted,
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
