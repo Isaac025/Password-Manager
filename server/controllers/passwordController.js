@@ -45,7 +45,10 @@ const getPasswords = async (req, res) => {
 
 const deletePassword = async (req, res) => {
   try {
-    await PASSWORD.findByIdAndDelete({ _id: req.params.id, user: req.user });
+    await PASSWORD.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user,
+    });
     res.json({ message: "Password deleted" });
   } catch (error) {
     res.status(500).json({ message: error.message });

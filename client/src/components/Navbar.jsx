@@ -39,10 +39,11 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="flex items-center gap-3">
-              <p className="font-[700] text-[16px] text-gray-900">
+              <p className="font-[700] text-[16px] text-gray-900 hidden md:block">
                 {" "}
                 Welcome <span className="text-purple-800">{user.fullName}</span>
               </p>
+              <p className="md:hidden">{user.fullName}</p>
               <button
                 className="bg-red-500 text-white rounded-md px-4 py-2 hover:bg-red-600 cursor-pointer"
                 onClick={handleLogout}

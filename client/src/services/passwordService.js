@@ -14,7 +14,7 @@ export const addPassword = async (formData) => {
 
 // DELETE password
 export const deletePassword = async (id) => {
-  const { data } = await API.delete(`/passwords/${id}`);
+  const { data } = await API.delete(`/passwords/${id}`, { data: { id } });
   return data;
 };
 
