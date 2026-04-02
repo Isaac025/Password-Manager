@@ -32,6 +32,7 @@ const getPasswords = async (req, res) => {
       return {
         ...item._doc,
         password: decrypted,
+        username: item.username || "", // Handle missing username
       };
     });
 

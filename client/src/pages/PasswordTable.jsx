@@ -3,7 +3,6 @@ import { useState } from "react";
 import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import API from "../services/api";
 import { useEffect } from "react";
 import { CircleLoader } from "react-spinners";
 import { toast } from "react-toastify";
@@ -22,20 +21,32 @@ const PasswordTable = () => {
 
   const redirect = useNavigate();
 
-  const getPasswords = async () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getPasswords();
+        setPasswords(data);
+        console.log(data);
+      } catch (err) {
+        toast.error("Failed to fetch passwords");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const deletePassword = async (id) => {
     try {
-      const res = await API.get("/passwords");
-      setPasswords(res.data);
+      await deletePassword(id);
+      toast.success("Password deleted successfully!");
     } catch (error) {
-      toast.error(error.response?.data?.message);
-    } finally {
-      setLoading(false);
+      toast.error("Failed to delete password");
+      console.error(error);
     }
   };
-
-  useEffect(() => {
-    getPasswords();
-  }, []);
 
   if (loading) {
     return (
@@ -99,7 +110,10 @@ const PasswordTable = () => {
                 >
                   Edit
                 </button>
-                <button className="mx-1 text-red-600 hover:underline">
+                <button
+                  onClick={() => deletePassword(item._id)}
+                  className="mx-1 text-red-600 hover:underline cursor-pointer"
+                >
                   Delete
                 </button>
               </td>

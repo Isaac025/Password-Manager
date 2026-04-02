@@ -19,12 +19,18 @@ const HomePage = () => {
           <div className="space-x-4">
             <button
               onClick={() => redirect("/signup")}
-              className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+              className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 cursor-pointer"
             >
               Get Started
             </button>
-            <button className="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-md hover:bg-indigo-50">
+            <button className="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-md hover:bg-indigo-50 cursor-not-allowed">
               Learn More
+            </button>
+            <button
+              onClick={() => redirect("/passwords")}
+              className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 mt-5 md:mt-0 cursor-pointer"
+            >
+              Manage Passwords
             </button>
           </div>
         </div>

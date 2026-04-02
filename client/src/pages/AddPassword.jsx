@@ -1,10 +1,13 @@
 import React from "react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
+import { addPassword } from "../services/passwordService";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const addSchema = yup
   .object({
@@ -18,15 +21,32 @@ const addSchema = yup
 
 const AddPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(addSchema),
   });
 
-  const handlePassword = () => {};
+  const redirect = useNavigate();
+
+  const handlePassword = async (form) => {
+    setIsSubmitting(true);
+    try {
+      const { data } = await addPassword(form);
+      toast.success("Password added successfully!");
+      redirect("/passwords");
+    } catch (error) {
+      console.error(error.message);
+      toast.error(error.response?.data?.message || "Failed to add password");
+    } finally {
+      setIsSubmitting(false);
+      reset();
+    }
+  };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -66,9 +86,10 @@ const AddPassword = () => {
         </div>
         <button
           type="submit"
+          disabled={isSubmitting}
           className="w-full p-2 bg-blue-500 text-white rounded "
         >
-          Add Password
+          {isSubmitting ? "Adding Password..." : "Add Password"}
         </button>
       </form>
     </div>
