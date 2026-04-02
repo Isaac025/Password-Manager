@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
-// import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { getPasswords, editPassword } from "../services/passwordService";
+import { CircleLoader } from "react-spinners";
+import { toast } from "react-toastify";
+import { IoMdEyeOff } from "react-icons/io";
+import { IoEye } from "react-icons/io5";
 
 const editSchema = yup
   .object({
@@ -16,9 +20,10 @@ const editSchema = yup
   .required();
 
 const EditPassword = () => {
-  // const { id } = useParams(); // get password ID from route
   const navigate = useNavigate();
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [password, setPassword] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -29,31 +34,52 @@ const EditPassword = () => {
     resolver: yupResolver(editSchema),
   });
 
-  // Fetch existing password entry
-  // useEffect(() => {
-  //   const fetchPassword = async () => {
-  //     try {
-  //       const res = await axios.get(`/api/passwords/${id}`);
-  //       const { site, username, password } = res.data;
-  //       setValue("site", site);
-  //       setValue("username", username);
-  //       setValue("password", password);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error(error);
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchPassword();
-  // }, [id, setValue]);
+  const { id } = useParams();
 
-  const handleEdit = async (data) => {
-    // try {
-    //   await axios.put(`/api/passwords/${id}`, data);
-    //   navigate("/table"); // redirect after success
-    // } catch (error) {
-    //   console.error(error);
-    // }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getPasswords();
+
+        const selected = data.find((item) => item._id === id);
+
+        if (selected) {
+          setPassword(selected);
+
+          // pre-fill form
+          setValue("site", selected.site);
+          setValue("username", selected.username);
+          setValue("password", selected.password);
+        }
+      } catch (err) {
+        toast.error("Failed to fetch password");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id, setValue]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center mt-40">
+        <CircleLoader />;
+      </div>
+    );
+  }
+
+  const handleEdit = async (formData) => {
+    try {
+      await editPassword(id, formData);
+
+      toast.success("Password updated successfully!");
+      navigate("/passwords");
+    } catch (error) {
+      toast.error("Failed to update password");
+      console.error(error);
+    }
   };
 
   // if (loading) return <p>Loading...</p>;
@@ -81,13 +107,21 @@ const EditPassword = () => {
         />
         <p className="text-sm text-red-600">{errors.username?.message}</p>
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 mb-3 border rounded"
-          {...register("password")}
-        />
-        <p className="text-sm text-red-600">{errors.password?.message}</p>
+        <div className="relative w-full mb-3">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className="w-full p-2 mb-3 border rounded"
+            {...register("password")}
+          />
+          <span
+            className="absolute right-3 top-2 cursor-pointer text-gray-600"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <IoMdEyeOff size={20} /> : <IoEye size={20} />}
+          </span>
+          <p className="text-sm text-red-600">{errors.password?.message}</p>
+        </div>
 
         <button
           type="submit"

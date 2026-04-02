@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 const addSchema = yup
   .object({
     site: yup.string().required("Website is required"),
-    name: yup.string().required("username is required"),
+    username: yup.string().required("username is required"),
     password: yup
       .string()
       .min(8, "Password must be at least 8 characters long"),
@@ -66,9 +66,9 @@ const AddPassword = () => {
           type="text"
           placeholder="username"
           className="w-full p-2 mb-3 border rounded"
-          {...register("name")}
+          {...register("username")}
         />
-        <p className="text-sm text-red-600">{errors.name?.message}</p>
+        <p className="text-sm text-red-600">{errors.username?.message}</p>
         <div className="relative w-full mb-3">
           <input
             type={showPassword ? "text" : "password"}
