@@ -2,12 +2,15 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const user = {
-    firstName: "Isaac",
-    lastName: "Olayiwola",
-  };
+  const user = JSON.parse(localStorage.getItem("user") || "null");
 
   const redirect = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    redirect("/login");
+  };
 
   return (
     <nav className="bg-white shadow-md">
@@ -19,7 +22,7 @@ const Navbar = () => {
           PassVault
         </h1>
         <div>
-          {user ? (
+          {!user ? (
             <div className="space-x-4">
               <button
                 onClick={() => redirect("/login")}
@@ -35,7 +38,15 @@ const Navbar = () => {
               </button>
             </div>
           ) : (
-            <div>{user.firstName + " " + user.lastName}</div>
+            <div className="flex items-center gap-3">
+              <span>{user.fullName}</span>
+              <button
+                className="bg-red-500 text-white rounded-md px-4 py-2 hover:bg-red-600 cursor-pointer"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
           )}
         </div>
       </div>

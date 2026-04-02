@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const baseURL = import.meta.env.PROD
-  ? "https://password-manager-ti6f.onrender.com/api"
-  : import.meta.env.VITE_BASE_URL || "http://localhost:3000/api";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 const API = axios.create({ baseURL, timeout: 15000 });
 

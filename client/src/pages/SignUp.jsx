@@ -41,6 +41,7 @@ const SignUp = () => {
     try {
       const { data } = await registerUser(form);
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
       toast.success("Signup successful!");
       redirect("/login");
     } catch (error) {

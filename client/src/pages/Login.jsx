@@ -40,10 +40,12 @@ const Login = () => {
     try {
       const { data } = await loginUser(form);
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
       toast.success("Login successful!");
       redirect("/passwords");
     } catch (error) {
       toast.error(error.response?.data?.message || "Invalid login");
+      console.error(error.message);
     } finally {
       reset();
       setIsSubmitting(false);
