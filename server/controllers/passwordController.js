@@ -44,7 +44,7 @@ const getPasswords = async (req, res) => {
 
 const deletePassword = async (req, res) => {
   try {
-    await PASSWORD.findByIdAndDelete(req.params.id);
+    await PASSWORD.findByIdAndDelete({ _id: req.params.id, user: req.user });
     res.json({ message: "Password deleted" });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -74,13 +74,11 @@ const editPassword = async (req, res) => {
 
     // Decrypt before sending back
     const decrypted = decrypt(JSON.parse(updatedPassword.password));
-    res
-      .status(200)
-      .json({
-        message: "password updated successfully",
-        ...updatedPassword._doc,
-        password: decrypted,
-      });
+    res.status(200).json({
+      message: "password updated successfully",
+      ...updatedPassword._doc,
+      password: decrypted,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });

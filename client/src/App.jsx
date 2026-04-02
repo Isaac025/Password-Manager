@@ -8,6 +8,7 @@ import PasswordTable from "./pages/PasswordTable";
 import HomePage from "./pages/HomePage";
 import Navbar from "./components/Navbar";
 import EditPassword from "./pages/EditPassword";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -18,9 +19,23 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/add" element={<AddPassword />} />
+          <Route
+            path="/add"
+            element={
+              <ProtectedRoute>
+                <AddPassword />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/passwords/:id" element={<EditPassword />} />
-          <Route path="/passwords" element={<PasswordTable />} />
+          <Route
+            path="/passwords"
+            element={
+              <ProtectedRoute>
+                <PasswordTable />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </>

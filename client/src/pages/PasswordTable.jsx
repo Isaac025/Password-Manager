@@ -7,6 +7,7 @@ import API from "../services/api";
 import { useEffect } from "react";
 import { CircleLoader } from "react-spinners";
 import { toast } from "react-toastify";
+import { getPasswords } from "../services/passwordService";
 
 const PasswordTable = () => {
   const [show, setShow] = useState(false);
