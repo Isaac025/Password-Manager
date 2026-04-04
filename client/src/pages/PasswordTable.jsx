@@ -82,50 +82,187 @@ const PasswordTable = () => {
           Add New Password
         </button>
       </div>
-      <table className="w-full max-w-[1040px] border-collapse bg-white shadow rounded">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border p-3">Website</th>
-            <th className="border p-3">Password</th>
-            <th className="border p-3">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+      {/* <div className="w-full overflow-x-auto p-4 md:p-8 bg-gray-100 min-h-screen">
+        <table className="w-full max-w-[1040px]  border-collapse bg-white shadow rounded">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border p-3 text-left whitespace-nowrap">
+                Website
+              </th>
+              <th className="border p-3 text-left whitespace-nowrap">
+                Password
+              </th>
+              <th className="border p-3 text-left whitespace-nowrap">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {passwords.map((item) => (
+              <tr key={item._id}>
+                <td className="border p-3 whitespace-nowrap">{item.site}</td>
+                <td className="border p-3 whitespace-nowrap">
+                  <input
+                    type={visibleId === item._id ? "text" : "password"}
+                    value={item.password}
+                    readOnly
+                    className="border rounded p-1 w-32 md:w-48"
+                  />
+
+                  <button
+                    onClick={() =>
+                      setVisibleId(visibleId === item._id ? null : item._id)
+                    }
+                  >
+                    {" "}
+                    {visibleId === item._id ? <IoMdEyeOff /> : <IoEye />}{" "}
+                  </button>
+                  <p>
+                    {item.username
+                      ? `${item.username} (username)`
+                      : "No username"}
+                  </p>
+                </td>
+                <td className="border p-3  whitespace-nowrap">
+                  <button
+                    onClick={() => copyPassword(item.password)}
+                    className="mx-1 text-green-600 hover:underline"
+                  >
+                    Copy
+                  </button>
+                  <button
+                    onClick={() => redirect(`/passwords/${item._id}`)}
+                    className="mx-1 text-yellow-600 hover:underline"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSelectedId(item._id);
+                      setShowModal(true);
+                    }}
+                    className="mx-1 text-red-600 hover:underline cursor-pointer"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div> */}
+
+      <div className="w-full overflow-x-auto p-4 md:p-8 bg-gray-100 min-h-screen">
+        {/* Desktop Table */}
+        <table className="hidden md:table w-full max-w-[1040px] border-collapse bg-white shadow rounded">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border p-3 text-left whitespace-nowrap">
+                Website
+              </th>
+              <th className="border p-3 text-left whitespace-nowrap">
+                Password
+              </th>
+              <th className="border p-3 text-left whitespace-nowrap">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {passwords.map((item) => (
+              <tr key={item._id}>
+                <td className="border p-3 whitespace-nowrap">{item.site}</td>
+                <td className="border p-3 whitespace-nowrap">
+                  <input
+                    type={visibleId === item._id ? "text" : "password"}
+                    value={item.password}
+                    readOnly
+                    className="border rounded p-1 w-32 md:w-48"
+                  />
+                  <button
+                    onClick={() =>
+                      setVisibleId(visibleId === item._id ? null : item._id)
+                    }
+                  >
+                    {visibleId === item._id ? <IoMdEyeOff /> : <IoEye />}
+                  </button>
+                  <p>
+                    {item.username
+                      ? `${item.username} (username)`
+                      : "No username"}
+                  </p>
+                </td>
+                <td className="border p-3 whitespace-nowrap">
+                  <button
+                    onClick={() => copyPassword(item.password)}
+                    className="mx-1 text-green-600 hover:underline"
+                  >
+                    Copy
+                  </button>
+                  <button
+                    onClick={() => redirect(`/passwords/${item._id}`)}
+                    className="mx-1 text-yellow-600 hover:underline"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSelectedId(item._id);
+                      setShowModal(true);
+                    }}
+                    className="mx-1 text-red-600 hover:underline cursor-pointer"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden space-y-4">
           {passwords.map((item) => (
-            <tr key={item._id}>
-              <td className="border p-3">{item.site}</td>
-              <td className="border p-3">
+            <div
+              key={item._id}
+              className="bg-white shadow rounded p-4 border space-y-2"
+            >
+              <div>
+                <span className="font-semibold">Website: </span>
+                {item.site}
+              </div>
+              <div>
+                <span className="font-semibold">Password: </span>
                 <input
                   type={visibleId === item._id ? "text" : "password"}
                   value={item.password}
                   readOnly
-                  className="border rounded p-1"
+                  className="border rounded p-1 w-32"
                 />
-
                 <button
                   onClick={() =>
                     setVisibleId(visibleId === item._id ? null : item._id)
                   }
+                  className="ml-2"
                 >
-                  {" "}
-                  {visibleId === item._id ? <IoMdEyeOff /> : <IoEye />}{" "}
+                  {visibleId === item._id ? <IoMdEyeOff /> : <IoEye />}
                 </button>
                 <p>
                   {item.username
                     ? `${item.username} (username)`
                     : "No username"}
                 </p>
-              </td>
-              <td className="border p-3 pl-0">
+              </div>
+              <div className="flex space-x-3">
                 <button
                   onClick={() => copyPassword(item.password)}
-                  className="mx-1 text-green-600 hover:underline"
+                  className="text-green-600 hover:underline"
                 >
                   Copy
                 </button>
                 <button
                   onClick={() => redirect(`/passwords/${item._id}`)}
-                  className="mx-1 text-yellow-600 hover:underline"
+                  className="text-yellow-600 hover:underline"
                 >
                   Edit
                 </button>
@@ -134,15 +271,16 @@ const PasswordTable = () => {
                     setSelectedId(item._id);
                     setShowModal(true);
                   }}
-                  className="mx-1 text-red-600 hover:underline cursor-pointer"
+                  className="text-red-600 hover:underline cursor-pointer"
                 >
                   Delete
                 </button>
-              </td>
-            </tr>
+              </div>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      </div>
+
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
