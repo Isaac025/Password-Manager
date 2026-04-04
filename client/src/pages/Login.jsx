@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { loginUser } from "../services/authService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
@@ -91,9 +91,9 @@ const Login = () => {
 
         <p className="mt-3 text-blue-700">
           Dont have an account?{" "}
-          <a href="/signup" className="underline text-red-600">
+          <Link to="/signup" className="underline text-red-600">
             Sign Up
-          </a>
+          </Link>
         </p>
       </form>
     </div>

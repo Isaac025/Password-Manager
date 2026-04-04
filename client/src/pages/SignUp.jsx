@@ -7,7 +7,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const registerSchema = yup
   .object({
@@ -99,9 +99,9 @@ const SignUp = () => {
         </button>
         <p className="mt-3 text-blue-700">
           Already have an account?{" "}
-          <a href="/login" className="underline text-red-600">
+          <Link to="/login" className="underline text-red-600">
             Login
-          </a>
+          </Link>
         </p>
       </form>
     </div>

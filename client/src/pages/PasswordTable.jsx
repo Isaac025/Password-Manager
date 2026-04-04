@@ -31,7 +31,7 @@ const PasswordTable = () => {
       try {
         const data = await getPasswords();
         setPasswords(data);
-        console.log(data);
+        // console.log(data);
       } catch (err) {
         toast.error("Failed to fetch passwords");
         console.error(err);
